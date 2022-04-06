@@ -4,7 +4,8 @@
   "description": "Api nodejs, typescript com DDD e TDD",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "test:staged": "jest"
   },
   "author": "Junior Paula",
   "license": "ISC",
