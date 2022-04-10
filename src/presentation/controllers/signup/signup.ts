@@ -1,5 +1,5 @@
 import { InvalidParamsError, MissingParamsError } from '../../errors'
-import { badRequest, serverError } from '../../helpers/http-helpers'
+import { badRequest, successResponse, serverError } from '../../helpers/http-helpers'
 import {
   HttpRequest,
   HttpResponse,
@@ -43,10 +43,7 @@ export class SignUpController implements Controller {
         password
       })
 
-      return {
-        statusCode: 200,
-        body: account
-      }
+      return successResponse(account)
     } catch (error) {
       return serverError()
     }
