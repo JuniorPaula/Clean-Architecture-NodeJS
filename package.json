@@ -14,10 +14,12 @@
   "author": "Junior Paula",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "git-commit-msg-linter": "^2.3.1",
     "validator": "^13.7.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/jest": "^24.0.25",
     "@types/node": "^17.0.23",
     "@types/validator": "^13.7.2",
