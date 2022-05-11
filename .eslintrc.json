@@ -6,6 +6,7 @@
   "rules": {
     "@typescript-eslint/strict-boolean-expressions": "off",
     "array-callback-return": "off",
-    "@typescript-eslint/no-misused-promises": "off"
+    "@typescript-eslint/no-misused-promises": "off",
+    "promise/param-names": "off"
   }
 }
