@@ -1,4 +1,4 @@
-import { badRequest, serverError, successResponse, unauthorized } from '../../helpers/http-helpers'
+import { badRequest, serverError, successResponse, unauthorized } from '../../helpers/http/http-helpers'
 import {
   Controller,
   HttpRequest,

@@ -1,5 +1,5 @@
 import { MissingParamsError } from '../../errors'
-import { badRequest, serverError, unauthorized, successResponse } from '../../helpers/http-helpers'
+import { badRequest, serverError, unauthorized, successResponse } from '../../helpers/http/http-helpers'
 import {
   HttpRequest,
   Authentication,

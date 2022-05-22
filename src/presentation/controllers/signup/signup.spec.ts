@@ -7,7 +7,7 @@ import {
   HttpRequest,
   Validation
 } from './signup-protocols'
-import { successResponse, badRequest, serverError } from '../../helpers/http-helpers'
+import { successResponse, badRequest, serverError } from '../../helpers/http/http-helpers'
 
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
