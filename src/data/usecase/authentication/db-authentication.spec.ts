@@ -1,5 +1,6 @@
 import { AuthenticationModel } from '../../../domain/usecases/authentication'
 import { HashComparer } from '../../protocols/cryptograthy/hash-comparer'
+import { TokenGenerator } from '../../protocols/cryptograthy/token-generator'
 import { LoadAccountByEmailRepository } from '../../protocols/db/load-acccount-by-email-repository'
 import { AccountModel } from '../add-account/db-add-account-protocols'
 import { DbAuthentication } from './db-authentication'
@@ -36,22 +37,40 @@ const makeHashComparerStub = (): HashComparer => {
   return new HashComparerStub()
 }
 
+const makeTokenGerenatorStub = (): TokenGenerator => {
+  class TokenGeneratorStub implements TokenGenerator {
+    async generate (id: string): Promise<string> {
+      return await new Promise(resolve => resolve('any_token'))
+    }
+  }
+
+  return new TokenGeneratorStub()
+}
+
 interface SutTypes {
   sut: DbAuthentication
   loadAccountByEmailRepositorystub: LoadAccountByEmailRepository
   hashComparerStub: HashComparer
+  tokenGerenatorStub: TokenGenerator
 
 }
 
 const makeSut = (): SutTypes => {
   const loadAccountByEmailRepositorystub = makeLoadAccountByEmailRepositoryStub()
   const hashComparerStub = makeHashComparerStub()
-  const sut = new DbAuthentication(loadAccountByEmailRepositorystub, hashComparerStub)
+  const tokenGerenatorStub = makeTokenGerenatorStub()
+
+  const sut = new DbAuthentication(
+    loadAccountByEmailRepositorystub,
+    hashComparerStub,
+    tokenGerenatorStub
+  )
 
   return {
     sut,
     loadAccountByEmailRepositorystub,
-    hashComparerStub
+    hashComparerStub,
+    tokenGerenatorStub
   }
 }
 
@@ -108,5 +127,13 @@ describe('Db Authentication Usecase', () => {
     const accessToken = await sut.auth(makeFakeAuthentication())
 
     expect(accessToken).toBeNull()
+  })
+
+  test('Should call TokenGerenator with correct id', async () => {
+    const { sut, tokenGerenatorStub } = makeSut()
+    const generateSpy = jest.spyOn(tokenGerenatorStub, 'generate')
+    await sut.auth(makeFakeAuthentication())
+
+    expect(generateSpy).toHaveBeenCalledWith('any_id')
   })
 })
