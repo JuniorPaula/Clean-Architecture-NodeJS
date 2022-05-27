@@ -15,10 +15,12 @@
   "author": "Junior Paula",
   "license": "ISC",
   "dependencies": {
+    "@types/jsonwebtoken": "^8.5.8",
     "bcrypt": "^5.0.1",
     "express": "^4.17.1",
     "fast-glob": "^3.1.1",
     "git-commit-msg-linter": "^2.3.1",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.5.1",
     "validator": "^13.7.0"
   },
