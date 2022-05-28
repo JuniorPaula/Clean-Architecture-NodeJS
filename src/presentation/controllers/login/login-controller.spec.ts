@@ -5,8 +5,8 @@ import {
   Authentication,
   Validation,
   AuthenticationModel
-} from './login-protocols'
-import { LoginController } from './login'
+} from './login-controller-protocols'
+import { LoginController } from './login-controller'
 
 const makeValidation = (): Validation => {
   class ValidationStub implements Validation {
