@@ -1,11 +1,11 @@
-import { AccessDeniedError } from '../errors'
-import { forbidden, serverError, successResponse } from '../helpers/http/http-helpers'
 import {
   HttpRequest,
   HttpResponse,
   Middleware,
   LoadAccountByToken
 } from './auth-middleware-protocols'
+import { forbidden, serverError, successResponse } from '@/presentation/helpers/http/http-helpers'
+import { AccessDeniedError } from '@/presentation/errors'
 
 export class AuthMiddleware implements Middleware {
   private readonly loadAccountByToken: LoadAccountByToken

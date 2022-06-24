@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
-import { Decrypter } from '../../../data/protocols/cryptograthy/decryper'
-import { TokenGenerator } from '../../../data/protocols/cryptograthy/token-generator'
+import { Decrypter } from '@/data/protocols/cryptograthy/decryper'
+import { TokenGenerator } from '@/data/protocols/cryptograthy/token-generator'
 
 export class JwtAdapter implements TokenGenerator, Decrypter {
   private readonly secret: string

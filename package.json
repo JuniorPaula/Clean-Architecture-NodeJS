@@ -4,7 +4,7 @@
   "description": "Api nodejs, typescript com DDD e TDD",
   "main": "index.js",
   "scripts": {
-    "build": "rimraf dist && tsc",
+    "build": "rimraf dist && tsc -p tsconfig.build.json",
     "start": "node dist/main/server.js",
     "dev": "sucrase-node src/main/server.ts",
     "up": "npm run build && docker-compose up -d",
@@ -25,6 +25,7 @@
     "express": "^4.17.1",
     "git-commit-msg-linter": "^2.3.1",
     "jsonwebtoken": "^8.5.1",
+    "module-alias": "^2.2.2",
     "mongodb": "^3.5.1",
     "validator": "^13.7.0"
   },
@@ -55,5 +56,8 @@
   },
   "engines": {
     "node": "16.x"
+  },
+  "_moduleAliases": {
+    "@": "dist"
   }
 }
