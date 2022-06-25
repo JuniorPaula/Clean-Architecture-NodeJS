@@ -33,7 +33,7 @@ const makeFakeLoadSurveysRepository = (): LoadSurveyRepository => {
   return new LoadSurveysRepositoryStub()
 }
 
-interface SutTypes {
+type SutTypes = {
   sut: DbLoadSurveys
   loadSurveysRepositoryStub: LoadSurveyRepository
 }

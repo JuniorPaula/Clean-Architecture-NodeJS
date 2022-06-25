@@ -7,6 +7,7 @@
     "@typescript-eslint/strict-boolean-expressions": "off",
     "array-callback-return": "off",
     "@typescript-eslint/no-misused-promises": "off",
-    "promise/param-names": "off"
+    "promise/param-names": "off",
+    "@typescript-eslint/consistent-type-definitions": "off"
   }
 }
