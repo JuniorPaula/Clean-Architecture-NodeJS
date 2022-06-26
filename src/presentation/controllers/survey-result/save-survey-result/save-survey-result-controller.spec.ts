@@ -1,6 +1,6 @@
 import MockDate from 'mockdate'
 import { InvalidParamsError } from '@/presentation/errors'
-import { forbidden, serverError } from '@/presentation/helpers/http/http-helpers'
+import { forbidden, serverError, successResponse } from '@/presentation/helpers/http/http-helpers'
 import { SaveSurveyResultController } from './save-survey-result-controller'
 import {
   HttpRequest,
@@ -145,5 +145,12 @@ describe('SaveSurveyResult Controller', () => {
 
     const httpResponse = await sut.handle(makeFakerequest())
     expect(httpResponse).toEqual(serverError(new Error()))
+  })
+
+  test('Should returns 200 on success', async () => {
+    const { sut } = makeSut()
+
+    const httpResponse = await sut.handle(makeFakerequest())
+    expect(httpResponse).toEqual(successResponse(makeFakeSurveyResult()))
   })
 })
