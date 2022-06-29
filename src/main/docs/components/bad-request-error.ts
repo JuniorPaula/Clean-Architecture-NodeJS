@@ -1,4 +1,4 @@
-export const badRequest = {
+export const badRequestError = {
   description: 'Requisição inválida',
   content: {
     'applicatio/json': {
