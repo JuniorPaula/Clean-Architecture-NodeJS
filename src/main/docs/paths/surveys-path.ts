@@ -9,7 +9,7 @@ export const surveyPath = {
       200: {
         description: 'Sucesso',
         content: {
-          'applicatio/json': {
+          'application/json': {
             schema: {
               $ref: '#/schemas/surveys'
             }

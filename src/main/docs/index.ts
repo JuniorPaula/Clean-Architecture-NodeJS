@@ -1,5 +1,6 @@
 import { loginPath } from './paths/login-path'
 import { surveyPath } from './paths/surveys-path'
+import { signupPath } from './paths/signup-path'
 import {
   forbiddenError,
   badRequestError,
@@ -14,7 +15,8 @@ import {
   surveyAnswerSchema,
   surveySchema,
   surveysSchema,
-  apiKeyAuthSchema
+  apiKeyAuthSchema,
+  signupParamsSchema
 } from './schemas'
 
 export default {
@@ -36,11 +38,13 @@ export default {
   ],
   paths: {
     '/login': loginPath,
+    '/signup': signupPath,
     '/surveys': surveyPath
   },
   schemas: {
     account: accountSchema,
     login: loginParamsSchema,
+    signup: signupParamsSchema,
     error: errorSchema,
     surveys: surveysSchema,
     survey: surveySchema,
