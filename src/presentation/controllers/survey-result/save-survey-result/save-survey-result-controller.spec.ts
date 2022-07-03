@@ -32,11 +32,14 @@ const makeFakeSurvey = (): SurveyModel => ({
 })
 
 const makeFakeSurveyResult = (): SurveyResultModel => ({
-  id: 'valid_id',
-  surveyId: 'valid_surveyId',
-  accountId: 'valid_accountId',
-  date: new Date(),
-  answer: 'valid_answer'
+  surveyId: 'any_surveyId',
+  question: 'any_question',
+  answers: [{
+    answer: 'any_answer',
+    count: 1,
+    percent: 50
+  }],
+  date: new Date()
 })
 
 const makeLoadSurveyById = (): LoadSurveyById => {
