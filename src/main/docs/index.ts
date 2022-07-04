@@ -20,7 +20,8 @@ import {
   signupParamsSchema,
   addSurveyParamsSchema,
   saveSurveyParamschema,
-  surveyResultchema
+  surveyResultchema,
+  surveyResultAnswer
 } from './schemas'
 
 export default {
@@ -56,7 +57,8 @@ export default {
     survey: surveySchema,
     surveyAnswer: surveyAnswerSchema,
     saveSurveyParams: saveSurveyParamschema,
-    surveyResult: surveyResultchema
+    surveyResult: surveyResultchema,
+    surveyResultAnswer: surveyResultAnswer
   },
   components: {
     securitySchemes: {
