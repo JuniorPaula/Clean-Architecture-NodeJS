@@ -1,3 +1,4 @@
+import MockDate from 'mockdate'
 import {
   LoadSurveyResultRepository,
   SurveyResultModel
@@ -46,6 +47,14 @@ const makeSut = (): SutTypes => {
 }
 
 describe('Db LoadSurveyResult usecase', () => {
+  beforeAll(() => {
+    MockDate.set(new Date())
+  })
+
+  afterAll(() => {
+    MockDate.reset()
+  })
+
   test('Should call LoadSurveyResultRepository', async () => {
     const { sut, loadSurveyResultRepositoryStub } = makeSut()
 
@@ -62,5 +71,11 @@ describe('Db LoadSurveyResult usecase', () => {
     )
     const promise = sut.load('any_surveyId')
     await expect(promise).rejects.toThrow()
+  })
+
+  test('Should return surveyResultModel on success', async () => {
+    const { sut } = makeSut()
+    const surveyResult = await sut.load('any_surveyId')
+    expect(surveyResult).toEqual(makeFakeSurveyResult())
   })
 })
