@@ -1,5 +1,7 @@
-import { LoadSurveyResultRepository } from '@/data/protocols/db/survey-result/load-survey-result-repository'
-import { SurveyResultModel } from '../save-survey-result/db-save-survey-result-protocols'
+import {
+  LoadSurveyResultRepository,
+  SurveyResultModel
+} from './db-load-survey-result-protocols'
 import { DbLoadSurveyResult } from './db-load-survey-result'
 
 const makeFakeSurveyResult = (): SurveyResultModel => ({
