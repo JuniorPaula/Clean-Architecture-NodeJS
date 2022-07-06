@@ -24,13 +24,33 @@ const makeFakeSurveyResult = (): SurveyResultModel => ({
   date: new Date()
 })
 
+const makeFakeEmptySurveyResult = (): SurveyResultModel => ({
+  surveyId: 'any_id',
+  question: 'any_question',
+  answers: [{
+    answer: 'any_answer',
+    count: 0,
+    percent: 0
+  },
+  {
+    answer: 'another_answer',
+    image: 'any_image',
+    count: 0,
+    percent: 0
+  }],
+  date: new Date()
+})
+
 const makeFakesurvey = (): SurveyModel => {
   return {
     id: 'any_id',
     question: 'any_question',
     answers: [{
-      image: 'any_image',
       answer: 'any_answer'
+    },
+    {
+      answer: 'another_answer',
+      image: 'any_image'
     }],
     date: new Date()
   }
@@ -98,6 +118,16 @@ describe('Db LoadSurveyResult usecase', () => {
     const loadBySurveyIdSpy = jest.spyOn(loadSurveyByIdRepositoryStub, 'loadById')
     await sut.load('any_surveyId')
     expect(loadBySurveyIdSpy).toHaveBeenCalledWith('any_surveyId')
+  })
+
+  test('Should return surveyResultModel with all answers count 0 if LoadSurveyResultRepository returns null', async () => {
+    const { sut, loadSurveyResultRepositoryStub } = makeSut()
+    jest.spyOn(loadSurveyResultRepositoryStub, 'loadBySurveyId').mockReturnValueOnce(
+      new Promise(resolve => resolve(null))
+    )
+
+    const surveyResult = await sut.load('any_surveyId')
+    expect(surveyResult).toEqual(makeFakeEmptySurveyResult())
   })
 
   test('Should throw if LoadSurveyResultRepository throws', async () => {
