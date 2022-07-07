@@ -1,3 +1,4 @@
+import MockDate from 'mockdate'
 import { InvalidParamsError } from '@/presentation/errors'
 import { forbidden, serverError, successResponse } from '@/presentation/helpers/http/http-helpers'
 import { LoadSurveyResultController } from './load-survey-result-controller'
@@ -80,6 +81,14 @@ const makeSut = (): SutTypes => {
 }
 
 describe('LoadSurveyResult Controller', () => {
+  beforeAll(() => {
+    MockDate.set(new Date())
+  })
+
+  afterAll(() => {
+    MockDate.reset()
+  })
+
   test('Should call LoadSurveyById with correct values', async () => {
     const { sut, loadSurveyByIdStub } = makeSut()
     const loadByIdSpy = jest.spyOn(loadSurveyByIdStub, 'loadById')
