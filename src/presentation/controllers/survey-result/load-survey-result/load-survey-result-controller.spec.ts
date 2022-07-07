@@ -1,5 +1,5 @@
 import { InvalidParamsError } from '@/presentation/errors'
-import { forbidden, serverError } from '@/presentation/helpers/http/http-helpers'
+import { forbidden, serverError, successResponse } from '@/presentation/helpers/http/http-helpers'
 import { LoadSurveyResultController } from './load-survey-result-controller'
 import {
   HttpRequest,
@@ -121,5 +121,11 @@ describe('LoadSurveyResult Controller', () => {
 
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
+  })
+
+  test('Should call LoadSurveyResult with correct values', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(successResponse(makeFakeSurveyResult()))
   })
 })
