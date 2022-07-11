@@ -1,5 +1,6 @@
 export * from '@/domain/usecases/account/authentication'
 export * from '@/domain/models/account'
+export * from '@/domain/models/authentication'
 export * from '@/data/protocols/cryptograthy/hash-comparer'
 export * from '@/data/protocols/cryptograthy/token-generator'
 export * from '@/data/protocols/db/account/load-acccount-by-email-repository'
