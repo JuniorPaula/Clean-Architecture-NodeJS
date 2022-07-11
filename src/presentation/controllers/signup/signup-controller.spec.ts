@@ -6,7 +6,8 @@ import {
   HttpRequest,
   Validation,
   Authentication,
-  AuthenticationModel
+  AuthenticationModel,
+  AuthenticationParams
 } from './signup-controller-protocols'
 import { successResponse, badRequest, serverError, forbidden } from '@/presentation/helpers/http/http-helpers'
 import { EmailInUseError, MissingParamsError, ServerError } from '@/presentation/errors'
@@ -23,8 +24,8 @@ const makeAddAccount = (): AddAccount => {
 
 const makeAuthetication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth (authentication: AuthenticationModel): Promise<string> {
-      return await new Promise(resolve => resolve('any_token'))
+    async auth (authentication: AuthenticationModel): Promise<AuthenticationParams> {
+      return await new Promise(resolve => resolve(makeFakeAutheticationParams()))
     }
   }
 
@@ -40,6 +41,11 @@ const makeValidation = (): Validation => {
 
   return new ValidationStub()
 }
+
+const makeFakeAutheticationParams = (): AuthenticationParams => ({
+  accessToken: 'any_token',
+  name: 'any_name'
+})
 
 const makeFakeAccount = (): AccountModel => ({
   id: 'valid_id',
@@ -115,7 +121,7 @@ describe('Signup Controller', () => {
     const { sut } = makeSut()
 
     const httpResponse = await sut.handle(makeFakeRequest())
-    expect(httpResponse).toEqual(successResponse({ accessToken: 'any_token' }))
+    expect(httpResponse).toEqual(successResponse(makeFakeAutheticationParams()))
   })
 
   test('Should call Validation with correct values', async () => {

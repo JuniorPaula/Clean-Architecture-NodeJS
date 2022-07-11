@@ -3,7 +3,8 @@ import {
   HttpRequest,
   Authentication,
   Validation,
-  AuthenticationModel
+  AuthenticationModel,
+  AuthenticationParams
 } from './login-controller-protocols'
 import { MissingParamsError } from '@/presentation/errors'
 import { badRequest, serverError, unauthorized, successResponse } from '@/presentation/helpers/http/http-helpers'
@@ -20,13 +21,18 @@ const makeValidation = (): Validation => {
 
 const makeAuthetication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth (authentication: AuthenticationModel): Promise<string> {
-      return await new Promise(resolve => resolve('any_token'))
+    async auth (authentication: AuthenticationModel): Promise<AuthenticationParams> {
+      return await new Promise(resolve => resolve(makeFakeAutheticationParams()))
     }
   }
 
   return new AuthenticationStub()
 }
+
+const makeFakeAutheticationParams = (): AuthenticationParams => ({
+  accessToken: 'any_token',
+  name: 'any_name'
+})
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -89,7 +95,7 @@ describe('LoginController', () => {
     const { sut } = makeSut()
 
     const HttpResponse = await sut.handle(makeFakeRequest())
-    expect(HttpResponse).toEqual(successResponse({ accessToken: 'any_token' }))
+    expect(HttpResponse).toEqual(successResponse(makeFakeAutheticationParams()))
   })
 
   test('Should call Validation with correct values', async () => {
