@@ -1,6 +1,6 @@
 {
   "name": "clean-node-api",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Api nodejs, typescript com DDD e TDD",
   "main": "index.js",
   "scripts": {
