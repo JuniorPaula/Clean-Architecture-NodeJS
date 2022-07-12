@@ -28,6 +28,7 @@
     "git-commit-msg-linter": "^2.3.1",
     "jsonwebtoken": "^8.5.1",
     "module-alias": "^2.2.2",
+    "mongo-round": "^1.0.0",
     "mongodb": "^3.5.1",
     "swagger-ui-express": "^4.1.4",
     "validator": "^13.7.0"

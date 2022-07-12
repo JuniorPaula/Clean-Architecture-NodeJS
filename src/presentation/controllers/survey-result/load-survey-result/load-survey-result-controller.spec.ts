@@ -11,6 +11,7 @@ import {
 } from './load-survey-result-controller-protocols'
 
 const makeFakeRequest = (): HttpRequest => ({
+  accountId: 'any_accountId',
   params: {
     surveyId: 'any_id'
   }
@@ -32,13 +33,15 @@ const makeFakeSurveyResult = (): SurveyResultModel => ({
   answers: [{
     answer: 'any_answer',
     count: 1,
-    percent: 50
+    percent: 50,
+    isCurrentAccountAnswer: true
   },
   {
     answer: 'another_answer',
     image: 'any_image',
     count: 10,
-    percent: 80
+    percent: 80,
+    isCurrentAccountAnswer: true
   }],
   date: new Date()
 })
@@ -55,7 +58,7 @@ const makeLoadSurveyById = (): LoadSurveyById => {
 
 const makeLoadSurveyResut = (): LoadSurveyResult => {
   class LoadSurveyResultStub implements LoadSurveyResult {
-    async load (surveyId: string): Promise<SurveyResultModel> {
+    async load (surveyId: string, accountId: string): Promise<SurveyResultModel> {
       return await Promise.resolve(makeFakeSurveyResult())
     }
   }
@@ -118,8 +121,9 @@ describe('LoadSurveyResult Controller', () => {
   test('Should call LoadSurveyResult with correct values', async () => {
     const { sut, loadSurveyResultStub } = makeSut()
     const loadSpy = jest.spyOn(loadSurveyResultStub, 'load')
+    const httpRequest = makeFakeRequest()
     await sut.handle(makeFakeRequest())
-    expect(loadSpy).toHaveBeenCalledWith('any_id')
+    expect(loadSpy).toHaveBeenCalledWith(httpRequest.params.surveyId, httpRequest.accountId)
   })
 
   test('Should return 500 if LoadSurveyById throws', async () => {
