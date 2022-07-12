@@ -1,7 +1,11 @@
 import MockDate from 'mockdate'
 import { LoadSurveysController } from './load-survey-controller'
-import { LoadSurveys, SurveyModel } from './load-survey-controller-protocols'
+import { LoadSurveys, SurveyModel, HttpRequest } from './load-survey-controller-protocols'
 import { noContent, serverError, successResponse } from '@/presentation/helpers/http/http-helpers'
+
+const makeRequest = (): HttpRequest => ({
+  accountId: 'any_accountId'
+})
 
 const makeFakesurveys = (): SurveyModel[] => {
   return [{
@@ -26,7 +30,7 @@ const makeFakesurveys = (): SurveyModel[] => {
 
 const makeLoadSurvey = (): LoadSurveys => {
   class LoadSurveysStub implements LoadSurveys {
-    async load (): Promise<SurveyModel[]> {
+    async load (accountId: string): Promise<SurveyModel[]> {
       return await new Promise(resolve => resolve(makeFakesurveys()))
     }
   }
@@ -58,18 +62,18 @@ describe('LoadSurveys Controller', () => {
     MockDate.reset()
   })
 
-  test('Should call LoadSurveys', async () => {
+  test('Should call LoadSurveys with correct value', async () => {
     const { sut, loadSurveysStub } = makeSut()
     const loadSpy = jest.spyOn(loadSurveysStub, 'load')
-
-    await sut.handle({})
-    expect(loadSpy).toHaveBeenCalled()
+    const httpRequest = makeRequest()
+    await sut.handle(httpRequest)
+    expect(loadSpy).toHaveBeenCalledWith(httpRequest.accountId)
   })
 
   test('Should 200 on success', async () => {
     const { sut } = makeSut()
 
-    const httpResponse = await sut.handle({})
+    const httpResponse = await sut.handle(makeRequest())
     expect(httpResponse).toEqual(successResponse(makeFakesurveys()))
   })
 
@@ -79,7 +83,7 @@ describe('LoadSurveys Controller', () => {
       new Promise((_, reject) => reject(new Error()))
     )
 
-    const httpResponse = await sut.handle({})
+    const httpResponse = await sut.handle(makeRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
   })
 
@@ -88,7 +92,7 @@ describe('LoadSurveys Controller', () => {
     jest.spyOn(loadSurveysStub, 'load').mockReturnValueOnce(
       new Promise(resolve => resolve([]))
     )
-    const httpResponse = await sut.handle({})
+    const httpResponse = await sut.handle(makeRequest())
     expect(httpResponse).toEqual(noContent())
   })
 })
