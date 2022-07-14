@@ -1,4 +1,4 @@
-import { Collection } from 'mongodb'
+import { Collection, ObjectId } from 'mongodb'
 import { AccountModel } from '@/domain/models/account'
 import { SurveyMongoRepository } from './survey-mongo-repository'
 import { MongoHelper } from '../helpers/mongo-helper'
@@ -13,7 +13,8 @@ const makeAccount = async (): Promise<AccountModel> => {
     email: 'any_email@mail.com',
     password: 'any_password'
   })
-  return MongoHelper.map(res.ops[0])
+  const account = await accountCollection.findOne({ _id: res.insertedId })
+  return MongoHelper.map(account)
 }
 
 const makeSut = (): SurveyMongoRepository => {
@@ -30,11 +31,11 @@ describe('Survey Mongo Repository', () => {
   })
 
   beforeEach(async () => {
-    surveyCollection = await MongoHelper.getCollection('surveys')
+    surveyCollection = MongoHelper.getCollection('surveys')
     await surveyCollection.deleteMany({})
-    surveyResultCollection = await MongoHelper.getCollection('surveyResults')
+    surveyResultCollection = MongoHelper.getCollection('surveyResults')
     await surveyResultCollection.deleteMany({})
-    accountCollection = await MongoHelper.getCollection('accounts')
+    accountCollection = MongoHelper.getCollection('accounts')
     await accountCollection.deleteMany({})
   })
 
@@ -83,16 +84,17 @@ describe('Survey Mongo Repository', () => {
         date: new Date()
       }])
 
-      const survey = result.ops[0]
+      const survey = await surveyCollection.findOne({ _id: result.insertedIds[0] })
       await surveyResultCollection.insertOne({
         surveyId: survey._id,
-        accountId: account.id,
+        accountId: new ObjectId(account.id),
         answer: survey.answers[0].answer,
         date: new Date()
       })
 
       const sut = makeSut()
       const surveys = await sut.loadAll(account.id)
+
       expect(surveys.length).toBe(2)
       expect(surveys[0].id).toBeTruthy()
       expect(surveys[0].question).toBe('any_question')
@@ -122,7 +124,7 @@ describe('Survey Mongo Repository', () => {
         date: new Date()
       })
 
-      const id = res.ops[0]._id
+      const id = res.insertedId.toHexString()
       const sut = makeSut()
       const survey = await sut.loadById(id)
       expect(survey).toBeTruthy()

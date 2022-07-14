@@ -20,7 +20,7 @@ describe('Login Routes', () => {
   beforeEach(async () => {
     surveyCollection = await MongoHelper.getCollection('surveys')
     await surveyCollection.deleteMany({})
-    accountCollection = await MongoHelper.getCollection('accounts')
+    accountCollection = MongoHelper.getCollection('accounts')
     await accountCollection.deleteMany({})
   })
 
@@ -42,13 +42,14 @@ describe('Login Routes', () => {
     })
 
     test('Should return 204 with valid token', async () => {
-      const account = await accountCollection.insertOne({
+      const res = await accountCollection.insertOne({
         name: 'John Due',
         email: 'john@mail.com',
         password: '123',
         role: 'admin'
       })
-      const id = account.ops[0]._id
+      const account = await accountCollection.findOne({ _id: res.insertedId })
+      const id = account._id
       const accessToken = sign({ id }, env.jwtSecret)
       await accountCollection.updateOne({
         _id: id
@@ -82,12 +83,13 @@ describe('Login Routes', () => {
     })
 
     test('Should return 204 on load surveys with valid access token', async () => {
-      const account = await accountCollection.insertOne({
+      const res = await accountCollection.insertOne({
         name: 'John Due',
         email: 'john@mail.com',
         password: '123'
       })
-      const id = account.ops[0]._id
+      const account = await accountCollection.findOne({ _id: res.insertedId })
+      const id = account._id
       const accessToken = sign({ id }, env.jwtSecret)
       await accountCollection.updateOne({
         _id: id

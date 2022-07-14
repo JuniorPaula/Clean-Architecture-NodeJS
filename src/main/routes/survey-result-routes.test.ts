@@ -20,7 +20,7 @@ describe('Survey Result Routes', () => {
   beforeEach(async () => {
     surveyCollection = await MongoHelper.getCollection('surveys')
     await surveyCollection.deleteMany({})
-    accountCollection = await MongoHelper.getCollection('accounts')
+    accountCollection = MongoHelper.getCollection('accounts')
     await accountCollection.deleteMany({})
   })
 
@@ -35,12 +35,13 @@ describe('Survey Result Routes', () => {
     })
 
     test('Should return 200 on save survey result with accessToken', async () => {
-      const account = await accountCollection.insertOne({
+      const result = await accountCollection.insertOne({
         name: 'John Due',
         email: 'john@mail.com',
         password: '123'
       })
-      const id = account.ops[0]._id
+      const account = await accountCollection.findOne({ _id: result.insertedId })
+      const id = account._id
       const accessToken = sign({ id }, env.jwtSecret)
       await accountCollection.updateOne({
         _id: id
@@ -60,9 +61,11 @@ describe('Survey Result Routes', () => {
         date: new Date()
       })
 
+      const surveyId = await surveyCollection.findOne({ _id: res.insertedId })
+
       await request(app)
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        .put(`/api/surveys/${res.ops[0]._id}/results`)
+        .put(`/api/surveys/${surveyId._id}/results`)
         .set('x-access-token', accessToken)
         .send({
           answer: 'Answer 1'
@@ -79,12 +82,13 @@ describe('Survey Result Routes', () => {
     })
 
     test('Should return 200 on load survey result with accessToken', async () => {
-      const account = await accountCollection.insertOne({
+      const result = await accountCollection.insertOne({
         name: 'John Due',
         email: 'john@mail.com',
         password: '123'
       })
-      const id = account.ops[0]._id
+      const account = await accountCollection.findOne({ _id: result.insertedId })
+      const id = account._id
       const accessToken = sign({ id }, env.jwtSecret)
       await accountCollection.updateOne({
         _id: id
@@ -103,10 +107,11 @@ describe('Survey Result Routes', () => {
         }],
         date: new Date()
       })
+      const surveyId = await surveyCollection.findOne({ _id: res.insertedId })
 
       await request(app)
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        .get(`/api/surveys/${res.ops[0]._id}/results`)
+        .get(`/api/surveys/${surveyId._id}/results`)
         .set('x-access-token', accessToken)
         .expect(200)
     })

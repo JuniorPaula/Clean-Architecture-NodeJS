@@ -27,7 +27,8 @@ const makeSurvey = async (): Promise<SurveyModel> => {
     ],
     date: new Date()
   })
-  return MongoHelper.map(res.ops[0])
+  const survey = await surveyCollection.findOne({ _id: res.insertedId })
+  return MongoHelper.map(survey)
 }
 
 const makeAccount = async (): Promise<AccountModel> => {
@@ -36,7 +37,8 @@ const makeAccount = async (): Promise<AccountModel> => {
     email: 'any_email@mail.com',
     password: 'any_password'
   })
-  return MongoHelper.map(res.ops[0])
+  const survey = await accountCollection.findOne({ _id: res.insertedId })
+  return MongoHelper.map(survey)
 }
 
 describe('Survey Result Mongo Repository', () => {
@@ -49,11 +51,11 @@ describe('Survey Result Mongo Repository', () => {
   })
 
   beforeEach(async () => {
-    surveyCollection = await MongoHelper.getCollection('surveys')
+    surveyCollection = MongoHelper.getCollection('surveys')
     await surveyCollection.deleteMany({})
-    surveyResultCollection = await MongoHelper.getCollection('surveyResults')
+    surveyResultCollection = MongoHelper.getCollection('surveyResults')
     await surveyResultCollection.deleteMany({})
-    accountCollection = await MongoHelper.getCollection('accounts')
+    accountCollection = MongoHelper.getCollection('accounts')
     await accountCollection.deleteMany({})
   })
 
@@ -63,8 +65,8 @@ describe('Survey Result Mongo Repository', () => {
       const account = await makeAccount()
       const sut = makeSut()
       await sut.save({
-        surveyId: new ObjectId(survey.id),
-        accountId: new ObjectId(account.id),
+        surveyId: survey.id,
+        accountId: account.id,
         answer: survey.answers[0].answer,
         date: new Date()
       })

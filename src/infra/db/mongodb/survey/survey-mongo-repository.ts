@@ -10,12 +10,12 @@ import { LoadSurveyByIdRepository } from '@/data/usecase/load-survey-by-id/load-
 export class SurveyMongoRepository
 implements AddSurveyRepository, LoadSurveyRepository, LoadSurveyByIdRepository {
   async add (surveyData: AddSurveyModel): Promise<void> {
-    const surveyCollection = await MongoHelper.getCollection('surveys')
+    const surveyCollection = MongoHelper.getCollection('surveys')
     await surveyCollection.insertOne(surveyData)
   }
 
   async loadAll (accountId: string): Promise<SurveyModel[]> {
-    const surveyCollection = await MongoHelper.getCollection('surveys')
+    const surveyCollection = MongoHelper.getCollection('surveys')
     const query = new QueryBuilder()
       .lookup({
         from: 'surveyResults',
@@ -44,12 +44,12 @@ implements AddSurveyRepository, LoadSurveyRepository, LoadSurveyByIdRepository {
       })
       .build()
 
-    const surveys = await surveyCollection.aggregate(query).toArray()
+    const surveys = await surveyCollection.aggregate<SurveyModel[]>(query).toArray()
     return MongoHelper.mapColletion(surveys)
   }
 
   async loadById (id: string): Promise<SurveyModel> {
-    const surveyCollection = await MongoHelper.getCollection('surveys')
+    const surveyCollection = MongoHelper.getCollection('surveys')
     const survey = await surveyCollection.findOne({ _id: new ObjectId(id) })
     return survey && MongoHelper.map(survey)
   }
