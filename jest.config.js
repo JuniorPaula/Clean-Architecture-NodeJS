@@ -6,6 +6,7 @@ module.exports = {
     '!<rootDir>/src/**/index.ts',
     '!<rootDir>/src/**/**/**-protocols.ts'
   ],
+  setupFiles: ['dotenv/config'],
   coverageDirectory: 'coverage',
   testEnvironment: 'node',
   preset: '@shelf/jest-mongodb',
